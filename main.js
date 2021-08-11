@@ -1,11 +1,13 @@
 const inquirer = require('inquirer');
-const generate = require('./generate');
+const generate = require('./utilities/generate');
+const savePass = require('./utilities/save');
 const chalk = require('chalk');
+const clipboardy = require('clipboardy'); 
 
-console.log(chalk.magenta('\nWelcome to the Node CL Password Generator! \n'));
+console.log(chalk.magenta.bold('\nWelcome to the Node CL Password Generator! \n'));
 console.log(chalk.yellow('• default password contains only lowercase characters'));
 console.log(chalk.yellow('• you can choose whether you want to add uppercase, numeric, or special characters'));
-console.log(chalk.yellow('• choosing the save option will insert your password into a text file\n'));
+console.log(chalk.yellow('• choosing the save option will insert your password into a local text file\n'));
 
 const questions = [
     {
@@ -35,6 +37,12 @@ const questions = [
         name: 'special',
         message: 'Do you want to include special characters?',
         default: false,
+    },
+    {
+        type: 'confirm',
+        name: 'save',
+        message: 'Do you want to save this password?',
+        default: false,
     }
 ]
 
@@ -47,9 +55,16 @@ inquirer.prompt(questions).then((answers) => {
     const numbers = answers.numbers;
     const special = answers.special;
 
+    const save = answers.save; //option to save
+
     let password = generate(length, uppercase, lowercase, numbers, special);
-    console.log(password);
+    
+    clipboardy.writeSync(password);
+
+    console.log(chalk.greenBright('\nPassword Generated -->  ') + chalk.bold(password) + 
+    chalk.gray('  (copied to clipboard) \n'));
+
+    if(save) savePass(password);
 
 });
-
 
