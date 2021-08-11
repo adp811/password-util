@@ -1,5 +1,11 @@
 const inquirer = require('inquirer');
 const generate = require('./generate');
+const chalk = require('chalk');
+
+console.log(chalk.magenta('\nWelcome to the Node CL Password Generator! \n'));
+console.log(chalk.yellow('• default password contains only lowercase characters'));
+console.log(chalk.yellow('• you can choose whether you want to add uppercase, numeric, or special characters'));
+console.log(chalk.yellow('• choosing the save option will insert your password into a text file\n'));
 
 const questions = [
     {
