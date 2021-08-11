@@ -1,28 +1,54 @@
 const gen = require('random-seed');
 
-const UPPER = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
-const LOWER = "abcdefghijklmnopqrstuvwxyz"
-const NUM = "0123456789"
-const SPECIAL = "!@#$%&*()_+-=[]|,./?><"
+const generate = (length = 12, containsUppercase = false, containsLowercase = false, containsNumbers = true, containsSpecial = false) => {
 
-var rand = gen.create();
+    var rand = gen.create();
 
-const generate = (length = 12, containsUppercase = false, containsLowercase = true, containsNumbers = false, containsSpecial = false) => {
-
-    let base = LOWER; //default characters for password
     let password = '';
+    
+    let UPPER = containsUppercase == true ? "ABCDEFGHIJKLMNOPQRSTUVWXYZ" : "";
+    let LOWER = containsLowercase == true ? "abcdefghijklmnopqrstuvwxyz" : "";
+    let NUM = containsNumbers == true ? "0123456789" : "";
+    let SPECIAL = containsSpecial ==  true ? "!@#$%&*()_+-=[]|,./?><" : "";
 
-    if (containsNumbers) base += NUM;
-    if (containsUppercase) base += UPPER;
-    if (containsSpecial) base += SPECIAL;
+    while(password.length < length){
 
-    let sbase = shuffle(base, rand(1000000));
+        let select = Math.floor(4 * Math.random());
 
-    for (var i = 0; i < length; i++) {
-        password += sbase.charAt(Math.floor(sbase.length * Math.random()));
+        switch (select) {
+
+            case 0:
+
+                if (LOWER == "") continue;
+                else password += LOWER.charAt(Math.floor(LOWER.length * Math.random()));
+                break;
+
+            case 1:
+
+                if (UPPER == "") continue;
+                else password += UPPER.charAt(Math.floor(UPPER.length * Math.random()));
+
+                break;
+
+            case 2: 
+
+                if (NUM == "") continue;
+                else password += NUM.charAt(Math.floor(NUM.length * Math.random()));
+
+                break;
+
+            case 3: 
+
+                if (SPECIAL == "") continue;
+                else password += SPECIAL.charAt(Math.floor(SPECIAL.length * Math.random()));
+
+                break;
+        
+        }
+
     }
 
-    return password;
+    return shuffle(password, rand(1000000)); 
 
 }
 
